@@ -45,6 +45,7 @@
   /* ============ ENVELOPE ============ */
   #intro{position:fixed;inset:0;z-index:100;overflow:hidden;background:var(--maroon-deep)}
   #intro.gone{visibility:hidden;pointer-events:none}
+  #intro:not(.open){cursor:pointer;-webkit-tap-highlight-color:transparent}
   .stage{position:absolute;left:50%;top:50%;width:max(100vw,66.667dvh);aspect-ratio:2/3;transform:translate(-50%,-50%);perspective:1600px}
   .env-part{position:absolute;inset:0;background:url(assets/envelope.webp) center/100% 100% no-repeat}
   .env-inside{position:absolute;inset:0;background:radial-gradient(60% 40% at 50% 46%,#fff4cf 0%,#e9c873 30%,#7a1626 75%);opacity:0;transition:opacity .8s var(--ease) .35s}
@@ -126,15 +127,16 @@
   .hero.in .hero-img{transform:scale(1)}
   .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16%;background:linear-gradient(transparent,var(--ivory));z-index:1}
   .hero .toran{width:100%;left:0}
-  .cartouche{position:relative;z-index:6;margin:min(44vw,210px) auto 0;width:min(86%,400px);padding:30px 18px 22px;text-align:center;
+  /* compact card, kept above the groom so the baraat stays visible */
+  .cartouche{position:relative;z-index:6;margin:min(34vw,160px) auto 0;width:min(78%,330px);padding:20px 14px 16px;text-align:center;
     background:rgba(255,249,236,.93);border-radius:200px 200px 22px 22px;
     box-shadow:0 18px 40px -18px rgba(58,8,17,.6),inset 0 0 0 2px var(--gold),inset 0 0 0 7px rgba(255,249,236,.93),inset 0 0 0 8px rgba(138,100,24,.55)}
-  .cartouche .g{font-size:18px;color:var(--maroon-2)}
-  .cartouche .shubh{font-family:"Rozha One",serif;font-size:44px;line-height:1.15;color:var(--maroon);margin-top:2px}
-  .cartouche .names{font-family:"Cinzel Decorative",serif;font-weight:700;font-size:clamp(28px,8.4vw,38px);line-height:1.12;color:var(--maroon-ink);margin-top:6px}
-  .cartouche .names .amp{display:block;font-family:"Pinyon Script",cursive;font-weight:400;font-size:.95em;line-height:1.05;color:var(--gold-deep)}
-  .cartouche .when{display:inline-block;margin-top:12px;padding:7px 20px;border-radius:999px;background:var(--maroon);color:#fbe9bf;font-family:"Cinzel",serif;font-weight:600;font-size:17px;letter-spacing:.2em}
-  .cartouche .day{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:19px;color:var(--ink-soft);margin-top:6px}
+  .cartouche .g{font-size:15px;color:var(--maroon-2)}
+  .cartouche .shubh{font-family:"Rozha One",serif;font-size:34px;line-height:1.15;color:var(--maroon);margin-top:2px}
+  .cartouche .names{font-family:"Cinzel Decorative",serif;font-weight:700;font-size:clamp(24px,7vw,32px);line-height:1.1;color:var(--maroon-ink);margin-top:4px}
+  .cartouche .names .amp{display:block;font-family:"Pinyon Script",cursive;font-weight:400;font-size:.9em;line-height:1;color:var(--gold-deep)}
+  .cartouche .when{display:inline-block;margin-top:10px;padding:6px 16px;border-radius:999px;background:var(--maroon);color:#fbe9bf;font-family:"Cinzel",serif;font-weight:600;font-size:15px;letter-spacing:.2em}
+  .cartouche .day{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:17px;color:var(--ink-soft);margin-top:4px}
 
   /* ganesha + family */
   .blessing{background:radial-gradient(70% 30% at 50% 10%,#fff8e6,var(--ivory) 70%);padding-top:64px}
@@ -276,8 +278,8 @@
   <button class="seal" id="seal" aria-label="Open the invitation"><img src="assets/seal.webp" alt="" width="412" height="420"></button>
   <div class="env-text env-bottom-text">
     <div class="chev"></div>
-    <div class="tap">Tap the seal to open</div>
-    <div class="hi">मोहर छूकर निमंत्रण खोलें</div>
+    <div class="tap">Tap anywhere to open</div>
+    <div class="hi">कहीं भी छूकर निमंत्रण खोलें</div>
   </div>
 </div>
 <canvas id="fx" aria-hidden="true"></canvas>
@@ -504,7 +506,8 @@
   // envelope
   var opened=false,mainEl=document.querySelector('main');
   if('inert' in mainEl)mainEl.inert=true;
-  document.getElementById('seal').addEventListener('click',function(){
+  // the whole envelope screen opens it; the seal button stays for keyboard users
+  intro.addEventListener('click',function(){
     if(opened)return;opened=true;
     window.scrollTo(0,0);
     intro.classList.add('open');
