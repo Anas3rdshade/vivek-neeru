@@ -183,7 +183,7 @@
   .sc .val b{font-family:"Cinzel",serif;font-size:clamp(24px,8.2vw,36px);line-height:1;color:var(--maroon);font-weight:700}
   .sc .val b.sm{font-size:clamp(11px,3.5vw,15px);letter-spacing:0}
   .sc .val small{font-family:"Plus Jakarta Sans",sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);margin-top:6px}
-  .sc canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:pointer;transition:opacity .6s var(--ease)}
+  .sc canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;transition:opacity .6s var(--ease)}
   .sc.done canvas{opacity:0;pointer-events:none}
   .reveal-msg{max-height:0;overflow:hidden;opacity:0;transform:translateY(10px);transition:all .8s var(--ease-out)}
   .reveal-msg.show{opacity:1;transform:none;max-height:140px;margin-top:20px}
@@ -347,7 +347,7 @@
     <img class="lantern r" src="assets/lantern.webp" alt="" width="260" height="759" loading="lazy">
     <span class="eyebrow reveal">Save the Date</span>
     <h2 class="reveal">Shubh Muhurat<span class="hi">शुभ मुहूर्त</span></h2>
-    <p class="hint reveal">Scratch the gold cards to reveal the wedding date</p>
+    <p class="hint reveal">Keep scrolling to reveal the wedding date</p>
     <div class="cards reveal">
       <div class="sc"><div class="val"><b>07</b><small>Day</small></div><canvas></canvas></div>
       <div class="sc"><div class="val"><b class="sm">DECEMBER</b><small>Month</small></div><canvas></canvas></div>
@@ -547,28 +547,39 @@
       ctx.globalCompositeOperation='source-over';ctx.fillStyle=g;ctx.fillRect(0,0,r.width,r.height);
       for(var i=0;i<900;i++){ctx.fillStyle='rgba(255,255,255,'+(Math.random()*.18)+')';ctx.fillRect(Math.random()*r.width,Math.random()*r.height,1,1);}
       ctx.strokeStyle='rgba(90,15,28,.45)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(r.width/2,r.height/2,r.width*.28,0,7);ctx.stroke();
-      ctx.fillStyle='rgba(74,12,23,.85)';ctx.font='700 11px "Plus Jakarta Sans",sans-serif';ctx.textAlign='center';ctx.fillText('SCRATCH',r.width/2,r.height/2+4);
     }
     paint();
-    var down=false,last=null;
-    function pos(e){var b=c.getBoundingClientRect();return{x:e.clientX-b.left,y:e.clientY-b.top};}
-    function scratch(p){
-      ctx.globalCompositeOperation='destination-out';ctx.strokeStyle='#000';ctx.lineCap='round';ctx.lineJoin='round';ctx.lineWidth=Math.max(26,r.width*.24);
-      ctx.beginPath();ctx.moveTo((last||p).x,(last||p).y);ctx.lineTo(p.x,p.y);ctx.stroke();last=p;
+    // zigzag "hand scratch" path, top to bottom, drawn up to the scroll progress
+    function path(){
+      var lw=Math.max(26,r.width*.24),pts=[],y=lw*.3,i=0;
+      while(y<r.height+lw*.3){pts.push({x:i%2?r.width+4:-4,y:y});y+=lw*.55;i++;}
+      return pts;
     }
-    function check(){
+    card.draw=function(p){
       if(cleared)return;
-      var data=ctx.getImageData(0,0,c.width,c.height).data,clear=0,step=64;
-      for(var i=3;i<data.length;i+=4*step){if(data[i]<128)clear++;}
-      if(clear/(data.length/(4*step))>.5){cleared=true;card.classList.add('done');done++;
+      paint();if(p<=0)return;
+      var pts=path(),n=pts.length-1,upto=p*n,k=Math.floor(upto);
+      ctx.globalCompositeOperation='destination-out';ctx.strokeStyle='#000';ctx.lineCap='round';ctx.lineJoin='round';ctx.lineWidth=Math.max(26,r.width*.24);
+      ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+      for(var j=1;j<=k&&j<=n;j++)ctx.lineTo(pts[j].x,pts[j].y);
+      if(k<n){var a=pts[k],b=pts[k+1],f=upto-k;ctx.lineTo(a.x+(b.x-a.x)*f,a.y+(b.y-a.y)*f);}
+      ctx.stroke();
+      if(p>=1){cleared=true;card.classList.add('done');done++;
         if(done===cards.length){document.getElementById('reveal-msg').classList.add('show');petals(40,1.5);show(4);}}
-    }
-    addEventListener('resize',function(){if(!cleared)paint();});
-    c.addEventListener('pointerdown',function(e){e.preventDefault();down=true;last=null;try{c.setPointerCapture(e.pointerId);}catch(_){}scratch(pos(e));});
-    c.addEventListener('pointermove',function(e){if(down)scratch(pos(e));});
-    ['pointerup','pointercancel'].forEach(function(t){c.addEventListener(t,function(){down=false;last=null;check();});});
-    if(document.fonts)document.fonts.ready.then(function(){if(!cleared)paint();});
+    };
   });
+
+  // scroll drives the scratch: starts as the cards enter, fully revealed at mid-screen
+  var row=document.querySelector('.scratch .cards'),best=0,ticking=false;
+  function onScroll(){
+    ticking=false;if(done===cards.length)return;
+    var b=row.getBoundingClientRect(),start=innerHeight,end=innerHeight*.55-b.height/2;
+    var p=Math.min(1,Math.max(0,(start-b.top)/(start-end)));
+    if(p<=best)return;best=p;
+    cards.forEach(function(card,i){card.draw(Math.min(1,Math.max(0,p*1.25-i*.125)));});
+  }
+  addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(onScroll);}},{passive:true});
+  addEventListener('resize',function(){best=0;cards.forEach(function(card){card.draw(0);});onScroll();});
 })();
 </script>
 </body>
