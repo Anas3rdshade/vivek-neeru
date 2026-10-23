@@ -104,7 +104,7 @@
   section{position:relative;padding:84px 20px 76px;text-align:center}
   .reveal{opacity:0;transform:translateY(34px);transition:opacity 1.1s var(--ease-out),transform 1.1s var(--ease-out)}
   .reveal.in{opacity:1;transform:none}
-  .toran{position:absolute;left:-4%;width:108%;top:-6px;z-index:5;pointer-events:none;transform-origin:50% 0;animation:sway 5s ease-in-out infinite}
+  .toran{position:absolute;left:-4%;width:108%;max-width:none;top:-6px;z-index:5;pointer-events:none;transform-origin:50% 0;animation:sway 5s ease-in-out infinite}
   .couple,.events,.rsvp,footer{padding-top:min(196px,50vw)!important}
   @keyframes sway{50%{transform:rotate(.5deg) translateY(2px)}}
   .lantern{position:absolute;top:-8px;z-index:4;width:46px;pointer-events:none;transform-origin:50% 0;animation:swing 4s ease-in-out infinite}
@@ -148,11 +148,12 @@
     -webkit-mask-image:radial-gradient(circle,#000 62%,transparent 71%);mask-image:radial-gradient(circle,#000 62%,transparent 71%)}
   .shloka-head{font-family:"Rozha One",serif;font-size:24px;color:var(--gold-deep);margin-top:16px}
   .shloka{font-size:21px;line-height:1.9;color:var(--maroon)}
-  .fcard{position:relative;margin:30px -6px 0;max-width:440px;padding:27% 10% 19%;background:url(assets/frame.webp) center/100% 100% no-repeat,radial-gradient(closest-side,#fffaf0 80%,rgba(255,250,240,0));}
-  .fcard .bless-k{font-family:"Cinzel",serif;font-size:14px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-deep)}
+  .fcard{position:relative;margin:30px -6px 0;max-width:440px;padding:31% 10% 20%;background:url(assets/frame.webp) center/100% 100% no-repeat,radial-gradient(closest-side,#fffaf0 80%,rgba(255,250,240,0));}
+  .fcard .bless-k{font-family:"Cinzel",serif;font-size:14px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-deep);text-wrap:balance}
   @media (min-width:452px){.fcard{margin:30px auto 0}}
   .fcard .elders{font-size:22px;font-weight:700;line-height:1.25;color:var(--ink);margin-top:6px}
   .fcard .invite-line{font-style:italic;font-size:20px;color:var(--ink-soft);margin-top:12px;line-height:1.45}
+  .fcard .invite-line.gp{margin-top:2px}
   .person{margin-top:20px}
   .person .nm{font-family:"Cinzel Decorative",serif;font-weight:700;font-size:34px;line-height:1;color:var(--maroon)}
   .person p{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:17px;color:var(--ink-soft);margin-top:8px;line-height:1.55}
@@ -307,9 +308,10 @@
     <div class="shloka-head reveal">॥ श्री गणेशाय नमः ॥</div>
     <p class="shloka hi reveal">वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।<br>निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥</p>
     <div class="fcard reveal">
-      <div class="bless-k">With the blessings of</div>
-      <div class="elders">Late Smt. Shanti Devi<br>&amp; Late Sh. Richhpal Singh</div>
-      <p class="invite-line">we cordially invite you to grace the auspicious occasion of the marriage of</p>
+      <div class="bless-k">With the heavenly blessings of</div>
+      <p class="invite-line gp">his late grandparents</p>
+      <div class="elders">Smt. Shanti Devi<br>&amp; Sh. Richhpal Singh</div>
+      <p class="invite-line">we cordially invite you to grace the auspicious occasion of the marriage of their grandson</p>
       <div class="person">
         <div class="nm">Vivek</div>
         <p>S/o Smt. Ompati&nbsp;Devi &amp; Sh.&nbsp;Satyavir&nbsp;Singh<br>R/o Vill.&nbsp;Dagroli, Charkhi&nbsp;Dadri</p>
@@ -317,7 +319,7 @@
       <div class="weds">weds</div>
       <div class="person">
         <div class="nm">Neeru</div>
-        <p>D/o Smt. Sushila&nbsp;Devi &amp; Sh.&nbsp;Mahendar&nbsp;Jakhar<br>(Late Smt.&nbsp;Ankor&nbsp;Devi &amp; Late&nbsp;Sh.&nbsp;Pratap&nbsp;Jakhar)<br>R/o Pilani, Jhunjhunu</p>
+        <p>D/o Smt. Sushila&nbsp;Devi &amp; Sh.&nbsp;Mahendar&nbsp;Kumar<br>(Late Smt.&nbsp;Ankor&nbsp;Devi &amp; Late&nbsp;Sh.&nbsp;Pratap&nbsp;Jakhar)<br>R/o Pilani, Jhunjhunu</p>
       </div>
     </div>
   </section>
@@ -426,6 +428,7 @@
         <li>Sh. Satya Prakash</li><li>Sh. Anil Kumar</li>
         <li>Harish Kumar</li><li>Neeraj Kumar</li>
         <li>Vikram Singh</li><li>Tejasvi Kumar</li>
+        <li>Deepak Kumar</li><li>Harsh Kumar</li>
       </ul>
     </div></div>
     <div class="stars" style="margin-top:56px">
